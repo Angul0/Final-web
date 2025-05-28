@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Carreras</title>
+    <link rel="stylesheet" href="carreras.css">
+    <script src="carreras.js"></script>
+</head>
+<body>
+    <div class="formulario-container">
+        <h1>Gestión de Carreras</h1>
+        <div class="formulario-botones">
+            <button onclick="nuevaCarrera()">Nueva</button>
+            <button onclick="editarCarrera()">Editar</button>
+            <button onclick="eliminarCarrera()">Eliminar</button>
+            <button onclick="consultarCarrera()">Consultar</button>
+            <button onclick="guardarCarrera()">Guardar</button>
+            <button onclick="cancelarCarrera()">Cancelar</button>
+        </div>
+        <div class="formulario-campos">
+            <label for="clave">Clave</label><br>
+            <input type="text" id="clave"><br>
+            <label for="nombre">Nombre</label><br>
+            <input type="text" id="nombre"><br>
+        </div>
+        <table id="tablaCarreras">
+            <thead>
+                <tr>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de las carreras se agregarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

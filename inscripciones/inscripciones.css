@@ -1,0 +1,101 @@
+body {
+    background: linear-gradient(120deg, #2980b9, #6dd5fa);
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formulario-container {
+    background: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    min-width: 350px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.formulario-container h1 {
+    color: #2980b9;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.formulario-campos label {
+    color: #2980b9;
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+.formulario-campos input[type="text"],
+.formulario-campos select {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.formulario-campos input[type="text"]:focus,
+.formulario-campos select:focus {
+    border-color: #2980b9;
+    outline: none;
+}
+
+.formulario-campos input[type="radio"] {
+    margin-left: 1rem;
+    margin-right: 0.3rem;
+    accent-color: #2980b9;
+}
+
+.formulario-botones {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.formulario-botones button {
+    padding: 0.6rem 1.2rem;
+    background: #2980b9;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.formulario-botones button:hover {
+    background: #2573a6;
+}
+
+#tablaInscripciones {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: #f8faff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#tablaInscripciones th, #tablaInscripciones td {
+    padding: 0.7rem;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#tablaInscripciones th {
+    background: #2980b9;
+    color: #fff;
+}
+
+#tablaInscripciones tr:last-child td {
+    border-bottom: none;
+}

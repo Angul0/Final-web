@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Inscripciones</title>
+    <link rel="stylesheet" href="inscripciones.css">
+    <script src="inscripciones.js"></script>
+</head>
+<body>
+    <div class="formulario-container">
+        <h1>Módulo de Inscripciones</h1>
+        <div class="formulario-campos">
+            <label for="nombreAlumno">Nombre del Alumno</label><br>
+            <input type="text" id="nombreAlumno"><br>
+
+            <label for="carrera">Carrera</label><br>
+            <select id="carrera">
+                <option value="IS">IS</option>
+                <option value="C">C</option>
+                <option value="IPI">IPI</option>
+                <option value="NANO">NANO</option>
+            </select><br>
+
+            <label for="semestre">Semestre</label><br>
+            <select id="semestre">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select><br>
+
+            <label>Turno</label><br>
+            <input type="radio" id="matutino" name="turno" value="Matutino">
+            <label for="matutino">Matutino</label>
+            <input type="radio" id="vespertino" name="turno" value="Vespertino">
+            <label for="vespertino">Vespertino</label>
+            <input type="radio" id="nocturno" name="turno" value="Nocturno">
+            <label for="nocturno">Nocturno</label>
+            <br><br>
+
+            <label>Tipo de Proceso</label><br>
+            <input type="radio" id="inscripcion" name="proceso" value="Inscripción">
+            <label for="inscripcion">Inscripción</label>
+            <input type="radio" id="reinscripcion" name="proceso" value="Reinscripción">
+            <label for="reinscripcion">Reinscripción</label>
+        </div>
+        <div class="formulario-botones">
+            <button onclick="guardarInscripcion()">Guardar</button>
+            <button onclick="cancelarInscripcion()">Cancelar</button>
+        </div>
+        <table id="tablaInscripciones">
+            <thead>
+                <tr>
+                    <th>Alumno</th>
+                    <th>Carrera</th>
+                    <th>Semestre</th>
+                    <th>Turno</th>
+                    <th>Proceso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de inscripciones se agregarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

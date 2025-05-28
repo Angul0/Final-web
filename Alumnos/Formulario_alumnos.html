@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="Formulario_alumnos.js"></script>
+    <link rel="stylesheet" href="Alumonos.css">
+</head>
+<body>
+    <div class="formulario-container">
+        <h1>Formulario Alumnos</h1>
+        <div class="formulario-botones">
+            <button onclick="NuevoAlumno()">Nuevo</button>
+            <button onclick="EditarAlumno()">Editar</button>
+            <button onclick="EliminarAlumno()">Eliminar</button>
+            <button onclick="consultarAlumno()">Consultar</button>
+            <button onclick="GuardarAlumno()">Guardar</button>
+            <button onclick="Cancelar()">Cancelar</button>
+        </div>
+        <div class="formulario-campos">
+            <label for="matricula">Matricula</label><br>
+            <input type="text" id="matricula"><br>
+            <label for="nombre">Nombre</label><br>
+            <input type="text" id="nombre"><br>
+            <label for="tel">Tel</label><br>
+            <input type="number" id="numero"><br>
+            <label for="correo">Correo</label><br>
+            <input type="text" id="correo"><br>
+        </div>
+        <table id="tablaAlumnos">
+            <thead>
+                <tr>
+                    <th>Matricula</th>
+                    <th>Nombre</th>
+                    <th>Tel</th>
+                    <th>Correo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de los alumnos se agregarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
