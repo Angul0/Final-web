@@ -90,3 +90,22 @@ body {
 #tablaProfesores tr:last-child td {
     border-bottom: none;
 }
+
+.volver-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.volver-btn:hover {
+    background-color: #217dbb;
+}

@@ -12,7 +12,7 @@ CORS(Api, resources={r"/*": {"origins": "http://localhost:4200"}},
 ########################################################
 
 conexion = mysql.connector.connect(user='root',
-                                   password='201614',
+                                   password='root',
                                    host='localhost',
                                    database='db-inscripciones')
 
