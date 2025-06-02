@@ -185,6 +185,49 @@ def eliminar_profesor():
     cursor.close()
     return jsonify({"message": "Profesor eliminado exitosamente"}), 200
 
+#############################
+### CRUD de inscripciones ###
+#############################
+
+@Api.route('/inscripciones/registrar', methods=['POST'])
+def registrar_inscripcion():
+    data = request.get_json()
+    cursor = conexion.cursor()
+    cursor.execute("INSERT INTO inscripciones (Matricula_alumno, Carrera, Semestre, Turno, TipoDeProceso, Id_Materia) VALUES (%s, %s, %s, %s, %s, %s)",
+                   (data['Matricula_alumno'], data['Carrera'], data['Semestre'], data['Turno'], data['TipoDeProceso'], data['Id_Materia']))
+    conexion.commit()
+    cursor.close()
+    return jsonify({"message": "Inscripción registrada exitosamente"}), 201
+
+@Api.route('/inscripciones/consultar', methods=['GET'])
+def consultar_inscripciones():
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM inscripciones WHERE Matricula_alumno = %s", (request.args.get('Matricula_alumno'),))
+    inscripciones = cursor.fetchall()
+    cursor.close()
+    
+    return jsonify(inscripciones)
+
+@Api.route('/inscripciones/actualizar', methods=['PUT'])
+def actualizar_inscripcion():
+    data = request.get_json()
+    cursor = conexion.cursor()
+    cursor.execute("UPDATE inscripciones SET Carrera = %s, Semestre = %s, Turno = %s, TipoDeProceso = %s, Id_Materia = %s WHERE Matricula_alumno = %s",
+                   (data['Carrera'], data['Semestre'], data['Turno'], data['TipoDeProceso'], data['Id_Materia'], data['Matricula_alumno']))
+    conexion.commit()
+    cursor.close()
+    return jsonify({"message": "Inscripción actualizada exitosamente"}), 200
+
+@Api.route('/inscripciones/eliminar', methods=['DELETE'])
+def eliminar_inscripcion():
+    matricula = request.args.get('Matricula_alumno')
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM inscripciones WHERE Matricula_alumno = %s", (matricula,))
+    conexion.commit()
+    cursor.close()
+    return jsonify({"message": "Inscripción eliminada exitosamente"}), 200
+
+
 if __name__ == '__main__':
     Api.run(debug=True)
 
