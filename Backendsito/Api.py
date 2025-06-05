@@ -39,6 +39,14 @@ def consultar_alumnos():
     
     return jsonify(alumnos)
 
+@Api.route('/alumnos/todos', methods=['GET'])
+def consultar_todos_alumnos():
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM alumnos")
+    alumnos = cursor.fetchall()
+    cursor.close()
+    return jsonify(alumnos)
+
 @Api.route('/alumnos/actualizar', methods=['PUT'])
 def actualizar_alumno():
     data = request.get_json()
@@ -71,6 +79,14 @@ def consultar_carreras():
     
     return jsonify(carreras)
 
+@Api.route('/carreras/todas', methods=['GET'])
+def consultar_todas_carreras():
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM carreras")
+    carreras = cursor.fetchall()
+    cursor.close()
+    return jsonify(carreras)
+
 @Api.route('/carreras/registrar', methods=['POST'])
 def registrar_carrera():
     data = request.get_json()
@@ -95,49 +111,49 @@ def actualizar_carrera():
 def eliminar_carrera():
     clave = request.args.get('clave')
     cursor = conexion.cursor()
-    cursor.execute("DELETE FROM carreras WHERE Clave = %s", (clave))
+    cursor.execute("DELETE FROM carreras WHERE Clave = %s", (clave,))
     conexion.commit()
     cursor.close()
-    return jsonify({"message": "Carrera eliminada exitosamente"}), 200
+    return jsonify({"message": "Carrera eliminada correctamente"}), 200
 
 ########################
 ### CRUD de materias ###
 ########################
 
-@Api.route('/materias/consultar', methods=['GET'])
-def consultar_materias():
-    cursor = conexion.cursor()
-    cursor.execute("SELECT * FROM materias WHERE Nombre  = %s", (request.args.get('Nombre'),))
-    materias = cursor.fetchall()
-    cursor.close()
-    
-    return jsonify(materias)
-
 @Api.route('/materias/registrar', methods=['POST'])
 def registrar_materia():
     data = request.get_json()
     cursor = conexion.cursor()
-    cursor.execute("INSERT INTO materias (Id_carrera, Nombre, Id_profesor, Hora, Aula, Semestre) VALUES (%s, %s, %s, %s, %s, %s)",
-                   (data['Id_carrera'], data['Nombre'], data['Id_profesor'], data['Hora'], data['Aula'], data['Semestre']))
+    cursor.execute(
+        "INSERT INTO materias (id_carrera, nombre, aula, semestre) VALUES (%s, %s, %s, %s)",
+        (data['id_carrera'], data['nombre'], data['aula'], data['semestre'])
+    )
     conexion.commit()
     cursor.close()
     return jsonify({"message": "Materia registrada exitosamente"}), 201
 
-@Api.route('/materias/actualizar', methods=['PUT'])
-def actualizar_materia():
-    data = request.get_json()
+@Api.route('/materias/consultar', methods=['GET'])
+def consultar_materia():
+    id_materia = request.args.get('id')
     cursor = conexion.cursor()
-    cursor.execute("UPDATE materias SET Id_carrera = %s, Nombre = %s, Id_profesor = %s, Hora = %s, Aula = %s, Semestre = %s WHERE Nombre = %s",
-                   (data['Id_carrera'], data['Nombre'], data['Id_profesor'], data['Hora'], data['Aula'], data['Semestre'], data['Nombre']))
-    conexion.commit()
+    cursor.execute("SELECT * FROM materias WHERE id = %s", (id_materia,))
+    materia = cursor.fetchall()
     cursor.close()
-    return jsonify({"message": "Materia actualizada exitosamente"}), 200
+    return jsonify(materia)
+
+@Api.route('/materias/todas', methods=['GET'])
+def consultar_todas_materias():
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM materias")
+    materias = cursor.fetchall()
+    cursor.close()
+    return jsonify(materias)
 
 @Api.route('/materias/eliminar', methods=['DELETE'])
 def eliminar_materia():
-    data = request.args.get('Nombre')
+    id_materia = request.args.get('id')
     cursor = conexion.cursor()
-    cursor.execute("DELETE FROM materias WHERE Nombre = %s", (data))
+    cursor.execute("DELETE FROM materias WHERE id = %s", (id_materia,))
     conexion.commit()
     cursor.close()
     return jsonify({"message": "Materia eliminada exitosamente"}), 200

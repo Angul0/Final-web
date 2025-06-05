@@ -11,26 +11,23 @@ function GuardarAlumno() {
     const numero = document.getElementById('numero').value;
     const correo = document.getElementById('correo').value;
 
-    document.querySelector('button[onclick="NuevoAlumno()"]').disabled = false;
-    document.querySelector('button[onclick="EditarAlumno()"]').disabled = false;
-    document.querySelector('button[onclick="EliminarAlumno()"]').disabled = false;
-    document.querySelector('button[onclick="consultarAlumno()"]').disabled = false;
-
-    const alumno = {
-        matricula: matricula,
-        nombre: nombre,
-        numero: numero,
-        correo: correo
-    };
-
-    listaAlumnos.push(alumno);
-    console.log(listaAlumnos);
-
-    // Actualizar la tabla
-    actualizarTabla();
-
-    // Limpiar los campos de entrada (no la tabla)
-    limpiarCampos();
+    fetch('http://127.0.0.1:5000/alumnos/registrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            Matricula: matricula,
+            Nombre: nombre,
+            Telefono: numero,
+            Correo: correo
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Alumno guardado correctamente');
+        actualizarTabla();
+        limpiarCampos();
+    })
+    .catch(error => alert('Error al guardar: ' + error));
 }
 
 function limpiarCampos() {
@@ -41,25 +38,19 @@ function limpiarCampos() {
 }
 
 function actualizarTabla() {
-    const tabla = document.getElementById('tablaAlumnos').getElementsByTagName('tbody')[0];
-
-    // Limpiar las filas existentes en la tabla
-    tabla.innerHTML = '';
-
-    // Recorrer el array de alumnos y agregar filas a la tabla
-    listaAlumnos.forEach(alumno => {
-        const fila = tabla.insertRow();
-
-        const celdaMatricula = fila.insertCell(0);
-        const celdaNombre = fila.insertCell(1);
-        const celdaNumero = fila.insertCell(2);
-        const celdaCorreo = fila.insertCell(3);
-
-        celdaMatricula.textContent = alumno.matricula;
-        celdaNombre.textContent = alumno.nombre;
-        celdaNumero.textContent = alumno.numero;
-        celdaCorreo.textContent = alumno.correo;
-    });
+    fetch('http://127.0.0.1:5000/alumnos/todos')
+        .then(response => response.json())
+        .then(data => {
+            const tabla = document.getElementById('tablaAlumnos').getElementsByTagName('tbody')[0];
+            tabla.innerHTML = '';
+            data.forEach(alumno => {
+                const fila = tabla.insertRow();
+                fila.insertCell(0).textContent = alumno[1]; // Matricula
+                fila.insertCell(1).textContent = alumno[2]; // Nombre
+                fila.insertCell(2).textContent = alumno[3]; // Telefono
+                fila.insertCell(3).textContent = alumno[4]; // Correo
+            });
+        });
 }
 
 function EditarAlumno(){ 
@@ -156,24 +147,18 @@ function NuevoAlumno() {
 }
 function EliminarAlumno() {
     const matricula = document.getElementById('matricula').value;
-
-    // Buscar el índice del alumno en el array
-    const indice = listaAlumnos.findIndex(alumno => alumno.matricula === matricula);
-
-    if (indice !== -1) {
-        // Eliminar el alumno del array
-        listaAlumnos.splice(indice, 1);
-        console.log(listaAlumnos);
-
-        // Actualizar la tabla
+    fetch(`http://127.0.0.1:5000/alumnos/eliminar?matricula=${matricula}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Alumno eliminado correctamente');
         actualizarTabla();
-
-        // Limpiar los campos de entrada
         limpiarCampos();
-    } else {
-        alert('Alumno no encontrado');
-    }
+    })
+    .catch(error => alert('Error al eliminar: ' + error));
 }
+
 function Cancelar() {
     // Limpiar los campos de entrada
     limpiarCampos();
@@ -190,3 +175,6 @@ function Cancelar() {
     document.querySelector('button[onclick="GuardarAlumno()"]').disabled = true;
     document.querySelector('button[onclick="Cancelar()"]').disabled = true;
 }
+
+// Llama a actualizarTabla al cargar la página
+window.onload = actualizarTabla;

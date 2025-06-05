@@ -4,19 +4,21 @@ function guardarCarrera() {
     const clave = document.getElementById('clave').value;
     const nombre = document.getElementById('nombre').value;
 
-    document.querySelector('button[onclick="nuevaCarrera()"]').disabled = false;
-    document.querySelector('button[onclick="editarCarrera()"]').disabled = false;
-    document.querySelector('button[onclick="eliminarCarrera()"]').disabled = false;
-    document.querySelector('button[onclick="consultarCarrera()"]').disabled = false;
-
-    const carrera = {
-        clave: clave,
-        nombre: nombre
-    };
-
-    listaCarreras.push(carrera);
-    actualizarTabla();
-    limpiarCampos();
+    fetch('http://127.0.0.1:5000/carreras/registrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            Clave: clave,
+            Nombre: nombre
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Carrera guardada correctamente');
+        actualizarTabla();
+        limpiarCampos();
+    })
+    .catch(error => alert('Error al guardar: ' + error));
 }
 
 function limpiarCampos() {
@@ -70,16 +72,18 @@ function editarCarrera() {
 }
 
 function consultarCarrera() {
-    document.getElementById('clave').disabled = true;
-    document.getElementById('nombre').disabled = true;
-
-    document.querySelector('button[onclick="nuevaCarrera()"]').disabled = false;
-    document.querySelector('button[onclick="editarCarrera()"]').disabled = false;
-    document.querySelector('button[onclick="eliminarCarrera()"]').disabled = false;
-    document.querySelector('button[onclick="consultarCarrera()"]').disabled = false;
-
-    document.querySelector('button[onclick="guardarCarrera()"]').disabled = true;
-    document.querySelector('button[onclick="cancelarCarrera()"]').disabled = true;
+    const clave = document.getElementById('clave').value;
+    fetch(`http://127.0.0.1:5000/carreras/consultar?clave=${clave}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const carrera = data[0];
+                document.getElementById('nombre').value = carrera[2] || carrera[1]; // Ajusta el índice según tu tabla
+            } else {
+                alert('Carrera no encontrada');
+            }
+        })
+        .catch(error => alert('Error al consultar: ' + error));
 }
 
 function nuevaCarrera() {
@@ -99,15 +103,16 @@ function nuevaCarrera() {
 
 function eliminarCarrera() {
     const clave = document.getElementById('clave').value;
-    const indice = listaCarreras.findIndex(c => c.clave === clave);
-
-    if (indice !== -1) {
-        listaCarreras.splice(indice, 1);
+    fetch(`http://127.0.0.1:5000/carreras/eliminar?clave=${clave}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Carrera eliminada correctamente');
         actualizarTabla();
         limpiarCampos();
-    } else {
-        alert('Carrera no encontrada');
-    }
+    })
+    .catch(error => alert('Error al eliminar: ' + error));
 }
 
 function cancelarCarrera() {
