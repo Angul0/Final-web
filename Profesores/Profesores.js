@@ -6,21 +6,25 @@ function GuardarProfesor() {
     const telefono = document.getElementById('telefono').value;
     const correo = document.getElementById('correo').value;
 
-    document.querySelector('button[onclick="NuevoProfesor()"]').disabled = false;
-    document.querySelector('button[onclick="EditarProfesor()"]').disabled = false;
-    document.querySelector('button[onclick="EliminarProfesor()"]').disabled = false;
-    document.querySelector('button[onclick="ConsultarProfesor()"]').disabled = false;
-
-    const profesor = {
-        clave: clave,
-        nombre: nombre,
-        telefono: telefono,
-        correo: correo
-    };
-
-    listaProfesores.push(profesor);
-    actualizarTabla();
-    limpiarCampos();
+    fetch('http://127.0.0.1:5000/profesores/registrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            Clave: clave,
+            Nombre: nombre,
+            Telefono: telefono,
+            Correo: correo
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Profesor guardado correctamente');
+            actualizarTabla();
+            limpiarCampos();
+        } else {
+            alert('Error al guardar');
+        }
+    });
 }
 
 function limpiarCampos() {
@@ -84,18 +88,19 @@ function EditarProfesor() {
 }
 
 function ConsultarProfesor() {
-    document.getElementById('clave').disabled = true;
-    document.getElementById('nombre').disabled = true;
-    document.getElementById('telefono').disabled = true;
-    document.getElementById('correo').disabled = true;
-
-    document.querySelector('button[onclick="NuevoProfesor()"]').disabled = false;
-    document.querySelector('button[onclick="EditarProfesor()"]').disabled = false;
-    document.querySelector('button[onclick="EliminarProfesor()"]').disabled = false;
-    document.querySelector('button[onclick="ConsultarProfesor()"]').disabled = false;
-
-    document.querySelector('button[onclick="GuardarProfesor()"]').disabled = true;
-    document.querySelector('button[onclick="Cancelar()"]').disabled = true;
+    const clave = document.getElementById('clave').value;
+    fetch(`http://localhost:5000/profesores/consultar?Clave=${clave}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const profesor = data[0];
+                document.getElementById('nombre').value = profesor[2];
+                document.getElementById('telefono').value = profesor[3];
+                document.getElementById('correo').value = profesor[4];
+            } else {
+                alert('Profesor no encontrado');
+            }
+        });
 }
 
 function NuevoProfesor() {
@@ -117,15 +122,18 @@ function NuevoProfesor() {
 
 function EliminarProfesor() {
     const clave = document.getElementById('clave').value;
-    const indice = listaProfesores.findIndex(p => p.clave === clave);
-
-    if (indice !== -1) {
-        listaProfesores.splice(indice, 1);
-        actualizarTabla();
-        limpiarCampos();
-    } else {
-        alert('Profesor no encontrado');
-    }
+    fetch(`http://localhost:5000/profesores/eliminar?Clave=${clave}`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Profesor eliminado correctamente');
+            actualizarTabla();
+            limpiarCampos();
+        } else {
+            alert('Error al eliminar');
+        }
+    });
 }
 
 function Cancelar() {

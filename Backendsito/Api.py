@@ -3,8 +3,7 @@ import mysql.connector
 from flask_cors import CORS
 
 Api = Flask(__name__)
-CORS(Api, resources={r"/*": {"origins": "http://localhost:4200"}}, 
-     supports_credentials=True)
+CORS(Api, resources={r"/*": {"origins": ["http://localhost:5500", "http://127.0.0.1:5500", "http://127.0.0.1:5501"]}}, supports_credentials=True)
 
 
 ########################################################
