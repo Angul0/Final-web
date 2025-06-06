@@ -208,19 +208,34 @@ def eliminar_profesor():
 def registrar_inscripcion():
     data = request.get_json()
     cursor = conexion.cursor()
-    cursor.execute("INSERT INTO inscripciones (Matricula_alumno, Carrera, Semestre, Turno, TipoDeProceso, Id_Materia) VALUES (%s, %s, %s, %s, %s, %s)",
-                   (data['Matricula_alumno'], data['Carrera'], data['Semestre'], data['Turno'], data['TipoDeProceso'], data['Id_Materia']))
+    # Buscar el id del alumno por la matrícula
+    cursor.execute("SELECT id FROM alumnos WHERE Matricula = %s", (data['Matricula_alumno'],))
+    alumno = cursor.fetchone()
+    if not alumno:
+        cursor.close()
+        return jsonify({"message": "Alumno no encontrado"}), 400
+    id_alumno = alumno[0]
+    cursor.execute(
+        "INSERT INTO inscripciones (Id_Alumno, Carrera, Semestre, Turno, TipoDeProceso, Id_Materia) VALUES (%s, %s, %s, %s, %s, %s)",
+        (id_alumno, data['Carrera'], data['Semestre'], data['Turno'], data['TipoDeProceso'], data['Id_Materia'])
+    )
     conexion.commit()
     cursor.close()
     return jsonify({"message": "Inscripción registrada exitosamente"}), 201
 
 @Api.route('/inscripciones/consultar', methods=['GET'])
 def consultar_inscripciones():
+    matricula = request.args.get('Matricula_alumno')
     cursor = conexion.cursor()
-    cursor.execute("SELECT * FROM inscripciones WHERE Matricula_alumno = %s", (request.args.get('Matricula_alumno'),))
+    cursor.execute("SELECT id FROM alumnos WHERE Matricula = %s", (matricula,))
+    alumno = cursor.fetchone()
+    if not alumno:
+        cursor.close()
+        return jsonify([])  # No hay inscripciones si no existe el alumno
+    id_alumno = alumno[0]
+    cursor.execute("SELECT * FROM inscripciones WHERE Id_Alumno = %s", (id_alumno,))
     inscripciones = cursor.fetchall()
     cursor.close()
-    
     return jsonify(inscripciones)
 
 @Api.route('/inscripciones/actualizar', methods=['PUT'])
